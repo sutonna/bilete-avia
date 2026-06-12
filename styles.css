@@ -241,6 +241,22 @@ textarea:focus {
   box-shadow: 5px 0 #7b8797, 0 5px #7b8797, 5px 5px #7b8797;
 }
 
+.time-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px;
+  gap: 10px;
+}
+
+.time-control input {
+  text-align: center;
+  font-weight: 650;
+}
+
+.time-control select {
+  font-weight: 750;
+  text-align: center;
+}
+
 button {
   min-height: 50px;
   border: 0;

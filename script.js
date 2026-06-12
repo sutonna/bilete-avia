@@ -3,6 +3,8 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnUc8DNvqS0wVt
 const dateInput = document.querySelector("#callDate");
 const dateDisplay = document.querySelector("#dateDisplay");
 const dateControl = document.querySelector(".date-control");
+const timeValueInput = document.querySelector("#callTimeValue");
+const timePeriodInput = document.querySelector("#callTimePeriod");
 const form = document.querySelector("#bookingForm");
 const result = document.querySelector("#result");
 
@@ -26,6 +28,9 @@ form.addEventListener("submit", async (event) => {
 
   const data = new FormData(form);
   const submitButton = form.querySelector("button");
+  data.set("callTime", `${timeValueInput.value.trim()} ${timePeriodInput.value}`);
+  data.delete("callTimeValue");
+  data.delete("callTimePeriod");
 
   submitButton.disabled = true;
   submitButton.textContent = "Se trimite...";
