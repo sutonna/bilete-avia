@@ -174,7 +174,6 @@ button:disabled {
 }
 
 .result {
-  display: none;
   margin-top: 2px;
   padding: 16px;
   border: 1px solid rgba(19, 138, 91, 0.28);
@@ -182,10 +181,15 @@ button:disabled {
   background: #eafaf3;
   color: #0b5f3e;
   line-height: 1.5;
+  min-height: 55px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
 }
 
 .result.show {
-  display: block;
+  opacity: 1;
+  visibility: visible;
 }
 
 @media (max-width: 900px) {

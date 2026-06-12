@@ -48,11 +48,16 @@ function resetButton(button) {
 }
 
 function showMessage(message) {
-  result.classList.add("show");
   result.innerHTML = message;
+  result.classList.add("show");
 
   setTimeout(() => {
+    result.style.transition = "none";
     result.classList.remove("show");
     result.innerHTML = "";
+
+    requestAnimationFrame(() => {
+      result.style.transition = "";
+    });
   }, 2000);
 }
