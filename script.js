@@ -15,12 +15,7 @@ const timePeriodInput = document.querySelector("#callTimePeriod");
 const form = document.querySelector("#bookingForm");
 const result = document.querySelector("#result");
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-const yyyy = today.getFullYear();
-const mm = String(today.getMonth() + 1).padStart(2, "0");
-const dd = String(today.getDate()).padStart(2, "0");
-let calendarView = new Date(today.getFullYear(), today.getMonth(), 1);
+let calendarView = new Date(getToday().getFullYear(), getToday().getMonth(), 1);
 let selectedDate = null;
 
 renderCalendar();
@@ -133,6 +128,8 @@ function resetDateField() {
   dateInput.value = "";
   dateDisplay.textContent = "Data";
   dateControl.classList.remove("has-value");
+  const today = getToday();
+  calendarView = new Date(today.getFullYear(), today.getMonth(), 1);
   renderCalendar();
 }
 
@@ -157,12 +154,13 @@ function toggleCalendar() {
 }
 
 function openCalendar() {
+  const today = getToday();
+
   if (!selectedDate) {
     selectDate(today, { keepOpen: true });
   }
 
-  const dateToShow = selectedDate;
-  calendarView = new Date(dateToShow.getFullYear(), dateToShow.getMonth(), 1);
+  calendarView = new Date(today.getFullYear(), today.getMonth(), 1);
   renderCalendar();
   calendarBackdrop.classList.add("open");
   calendarPopover.classList.add("open");
@@ -187,6 +185,7 @@ function changeMonth(offset) {
 function renderCalendar() {
   calendarGrid.innerHTML = "";
 
+  const today = getToday();
   const monthStart = new Date(calendarView.getFullYear(), calendarView.getMonth(), 1);
   const monthEnd = new Date(calendarView.getFullYear(), calendarView.getMonth() + 1, 0);
   const firstWeekday = (monthStart.getDay() + 6) % 7;
@@ -249,4 +248,11 @@ function toDateValue(date) {
   const day = String(date.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
+}
+
+function getToday() {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+
+  return date;
 }
