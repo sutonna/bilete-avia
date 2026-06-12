@@ -24,15 +24,29 @@ let selectedDate = null;
 
 renderCalendar();
 
-dateControl.addEventListener("click", toggleCalendar);
+dateControl.addEventListener("click", (event) => {
+  event.stopPropagation();
+  toggleCalendar();
+});
 dateControl.addEventListener("keydown", (event) => {
   if (event.key === "Enter" || event.key === " ") {
     event.preventDefault();
     toggleCalendar();
   }
 });
-prevMonthButton.addEventListener("click", () => changeMonth(-1));
-nextMonthButton.addEventListener("click", () => changeMonth(1));
+calendarPopover.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+prevMonthButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  changeMonth(-1);
+});
+nextMonthButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  changeMonth(1);
+});
 document.addEventListener("click", closeCalendarOnOutsideClick);
 document.addEventListener("keydown", closeCalendarOnEscape);
 timeValueInput.addEventListener("input", formatTimeInput);
