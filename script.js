@@ -22,6 +22,7 @@ dateControl.addEventListener("keydown", (event) => {
   }
 });
 dateInput.addEventListener("change", updateDateDisplay);
+timeValueInput.addEventListener("input", formatTimeInput);
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -111,4 +112,15 @@ function openDatePicker() {
   }
 
   dateInput.focus();
+}
+
+function formatTimeInput() {
+  const digits = timeValueInput.value.replace(/\D/g, "").slice(0, 4);
+
+  if (digits.length <= 2) {
+    timeValueInput.value = digits;
+    return;
+  }
+
+  timeValueInput.value = `${digits.slice(0, 2)}:${digits.slice(2)}`;
 }
