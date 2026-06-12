@@ -14,6 +14,7 @@ const timeValueInput = document.querySelector("#callTimeValue");
 const timePeriodInput = document.querySelector("#callTimePeriod");
 const form = document.querySelector("#bookingForm");
 const result = document.querySelector("#result");
+const MIN_CALENDAR_DATE = "2026-06-12";
 
 let calendarView = new Date(getToday().getFullYear(), getToday().getMonth(), 1);
 let selectedDate = null;
@@ -251,7 +252,7 @@ function toDateValue(date) {
 }
 
 function getToday() {
-  const date = new Date();
+  const date = new Date(`${MIN_CALENDAR_DATE}T12:00:00`);
   date.setHours(0, 0, 0, 0);
 
   return date;
