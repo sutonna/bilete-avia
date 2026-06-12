@@ -43,8 +43,28 @@
               <span class="date-control" role="button" tabindex="0">
                 <span id="dateDisplay">Data</span>
                 <span class="calendar-icon" aria-hidden="true"></span>
-                <input id="callDate" name="callDate" type="date" required>
               </span>
+              <input id="callDate" name="callDate" type="hidden">
+              <div class="calendar-popover" id="calendarPopover" aria-label="Calendar programare">
+                <div class="calendar-head">
+                  <button class="calendar-nav" id="prevMonth" type="button" aria-label="Luna precedenta">&#8249;</button>
+                  <div>
+                    <strong id="calendarMonth"></strong>
+                    <span id="calendarYear"></span>
+                  </div>
+                  <button class="calendar-nav" id="nextMonth" type="button" aria-label="Luna urmatoare">&#8250;</button>
+                </div>
+                <div class="calendar-weekdays" aria-hidden="true">
+                  <span>Lu</span>
+                  <span>Ma</span>
+                  <span>Mi</span>
+                  <span>Jo</span>
+                  <span>Vi</span>
+                  <span>Sa</span>
+                  <span>Du</span>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+              </div>
             </label>
 
             <label>

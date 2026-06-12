@@ -3,25 +3,38 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnUc8DNvqS0wVt
 const dateInput = document.querySelector("#callDate");
 const dateDisplay = document.querySelector("#dateDisplay");
 const dateControl = document.querySelector(".date-control");
+const calendarPopover = document.querySelector("#calendarPopover");
+const calendarGrid = document.querySelector("#calendarGrid");
+const calendarMonth = document.querySelector("#calendarMonth");
+const calendarYear = document.querySelector("#calendarYear");
+const prevMonthButton = document.querySelector("#prevMonth");
+const nextMonthButton = document.querySelector("#nextMonth");
 const timeValueInput = document.querySelector("#callTimeValue");
 const timePeriodInput = document.querySelector("#callTimePeriod");
 const form = document.querySelector("#bookingForm");
 const result = document.querySelector("#result");
 
 const today = new Date();
+today.setHours(0, 0, 0, 0);
 const yyyy = today.getFullYear();
 const mm = String(today.getMonth() + 1).padStart(2, "0");
 const dd = String(today.getDate()).padStart(2, "0");
-dateInput.min = `${yyyy}-${mm}-${dd}`;
+let calendarView = new Date(today.getFullYear(), today.getMonth(), 1);
+let selectedDate = null;
 
-dateControl.addEventListener("click", openDatePicker);
+renderCalendar();
+
+dateControl.addEventListener("click", toggleCalendar);
 dateControl.addEventListener("keydown", (event) => {
   if (event.key === "Enter" || event.key === " ") {
     event.preventDefault();
-    openDatePicker();
+    toggleCalendar();
   }
 });
-dateInput.addEventListener("change", updateDateDisplay);
+prevMonthButton.addEventListener("click", () => changeMonth(-1));
+nextMonthButton.addEventListener("click", () => changeMonth(1));
+document.addEventListener("click", closeCalendarOnOutsideClick);
+document.addEventListener("keydown", closeCalendarOnEscape);
 timeValueInput.addEventListener("input", formatTimeInput);
 
 form.addEventListener("submit", async (event) => {
@@ -29,6 +42,14 @@ form.addEventListener("submit", async (event) => {
 
   const data = new FormData(form);
   const submitButton = form.querySelector("button");
+
+  if (!dateInput.value) {
+    showMessage("<strong>Alege data apelului.</strong>");
+    dateControl.focus();
+    calendarPopover.classList.add("open");
+    return;
+  }
+
   data.set("callTime", `${timeValueInput.value.trim()} ${timePeriodInput.value}`);
   data.delete("callTimeValue");
   data.delete("callTimePeriod");
@@ -79,14 +100,7 @@ function showMessage(message) {
   }, 2000);
 }
 
-function updateDateDisplay() {
-  if (!dateInput.value) {
-    resetDateField();
-    return;
-  }
-
-  const date = new Date(`${dateInput.value}T12:00:00`);
-
+function updateDateDisplay(date) {
   dateDisplay.textContent = new Intl.DateTimeFormat("ro-RO", {
     day: "2-digit",
     month: "short",
@@ -96,22 +110,11 @@ function updateDateDisplay() {
 }
 
 function resetDateField() {
-  dateInput.min = `${yyyy}-${mm}-${dd}`;
+  selectedDate = null;
+  dateInput.value = "";
   dateDisplay.textContent = "Data";
   dateControl.classList.remove("has-value");
-}
-
-function openDatePicker() {
-  try {
-    if (typeof dateInput.showPicker === "function") {
-      dateInput.showPicker();
-      return;
-    }
-  } catch (error) {
-    dateInput.focus();
-  }
-
-  dateInput.focus();
+  renderCalendar();
 }
 
 function formatTimeInput() {
@@ -123,4 +126,93 @@ function formatTimeInput() {
   }
 
   timeValueInput.value = `${digits.slice(0, 2)}:${digits.slice(2)}`;
+}
+
+function toggleCalendar() {
+  calendarPopover.classList.toggle("open");
+}
+
+function closeCalendar() {
+  calendarPopover.classList.remove("open");
+}
+
+function closeCalendarOnOutsideClick(event) {
+  if (!event.target.closest(".date-field")) {
+    closeCalendar();
+  }
+}
+
+function closeCalendarOnEscape(event) {
+  if (event.key === "Escape") {
+    closeCalendar();
+  }
+}
+
+function changeMonth(offset) {
+  calendarView = new Date(calendarView.getFullYear(), calendarView.getMonth() + offset, 1);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  calendarGrid.innerHTML = "";
+
+  const monthStart = new Date(calendarView.getFullYear(), calendarView.getMonth(), 1);
+  const monthEnd = new Date(calendarView.getFullYear(), calendarView.getMonth() + 1, 0);
+  const firstWeekday = (monthStart.getDay() + 6) % 7;
+
+  calendarMonth.textContent = new Intl.DateTimeFormat("ro-RO", { month: "long" }).format(monthStart);
+  calendarYear.textContent = monthStart.getFullYear();
+
+  for (let i = 0; i < firstWeekday; i += 1) {
+    const emptyCell = document.createElement("span");
+    emptyCell.className = "calendar-empty";
+    calendarGrid.append(emptyCell);
+  }
+
+  for (let day = 1; day <= monthEnd.getDate(); day += 1) {
+    const date = new Date(calendarView.getFullYear(), calendarView.getMonth(), day);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "calendar-day";
+    button.textContent = day;
+
+    if (isSameDate(date, today)) {
+      button.classList.add("today");
+    }
+
+    if (selectedDate && isSameDate(date, selectedDate)) {
+      button.classList.add("selected");
+    }
+
+    if (date < today) {
+      button.classList.add("is-disabled");
+      button.disabled = true;
+    } else {
+      button.addEventListener("click", () => selectDate(date));
+    }
+
+    calendarGrid.append(button);
+  }
+}
+
+function selectDate(date) {
+  selectedDate = date;
+  dateInput.value = toDateValue(date);
+  updateDateDisplay(date);
+  renderCalendar();
+  closeCalendar();
+}
+
+function isSameDate(firstDate, secondDate) {
+  return firstDate.getFullYear() === secondDate.getFullYear()
+    && firstDate.getMonth() === secondDate.getMonth()
+    && firstDate.getDate() === secondDate.getDate();
+}
+
+function toDateValue(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
