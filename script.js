@@ -129,7 +129,19 @@ function formatTimeInput() {
 }
 
 function toggleCalendar() {
-  calendarPopover.classList.toggle("open");
+  if (calendarPopover.classList.contains("open")) {
+    closeCalendar();
+    return;
+  }
+
+  openCalendar();
+}
+
+function openCalendar() {
+  const dateToShow = selectedDate || today;
+  calendarView = new Date(dateToShow.getFullYear(), dateToShow.getMonth(), 1);
+  renderCalendar();
+  calendarPopover.classList.add("open");
 }
 
 function closeCalendar() {

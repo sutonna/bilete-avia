@@ -232,17 +232,17 @@ textarea:focus {
 .calendar-popover {
   position: absolute;
   z-index: 20;
-  top: calc(100% + 10px);
+  top: calc(100% + 8px);
   left: 0;
-  width: min(320px, 88vw);
-  padding: 14px;
+  width: min(286px, calc(100vw - 48px));
+  padding: 10px;
   border: 1px solid #d7dee8;
-  border-radius: 14px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 22px 60px rgba(31, 41, 55, 0.18);
+  box-shadow: 0 18px 46px rgba(31, 41, 55, 0.16);
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
@@ -254,38 +254,39 @@ textarea:focus {
 
 .calendar-head {
   display: grid;
-  grid-template-columns: 38px 1fr 38px;
+  grid-template-columns: 32px 1fr 32px;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
 .calendar-head strong {
   display: block;
   color: var(--ink);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 760;
+  text-transform: capitalize;
 }
 
 .calendar-head span {
   display: block;
-  margin-top: 2px;
+  margin-top: 1px;
   color: var(--blue);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 750;
 }
 
 .calendar-nav {
-  min-height: 38px;
-  width: 38px;
+  min-height: 32px;
+  width: 32px;
   padding: 0;
   border: 1px solid #d8e0ea;
   border-radius: 999px;
   background: #f7faff;
   color: var(--ink);
   box-shadow: none;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 500;
 }
 
@@ -299,13 +300,13 @@ textarea:focus {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 4px;
 }
 
 .calendar-weekdays {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: #8390a3;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 760;
   text-align: center;
 }
@@ -313,13 +314,13 @@ textarea:focus {
 .calendar-day {
   display: grid;
   place-items: center;
-  min-height: 34px;
+  min-height: 30px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 8px;
   background: transparent;
   color: var(--ink);
   box-shadow: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 650;
   cursor: pointer;
   transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
@@ -351,7 +352,7 @@ textarea:focus {
 }
 
 .calendar-empty {
-  min-height: 34px;
+  min-height: 30px;
 }
 
 .time-control {
@@ -434,6 +435,10 @@ button:disabled {
 @media (max-width: 620px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .calendar-popover {
+    width: min(292px, calc(100vw - 48px));
   }
 
   .form-head,
