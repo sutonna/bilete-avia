@@ -38,9 +38,13 @@
           </div>
 
           <div class="grid">
-            <label>
-              Data apelului
-              <input id="callDate" name="callDate" type="date" required>
+            <label class="date-field">
+              <span>Data apelului</span>
+              <span class="date-control">
+                <span id="dateDisplay">Data</span>
+                <span class="calendar-icon" aria-hidden="true"></span>
+                <input id="callDate" name="callDate" type="date" required>
+              </span>
             </label>
 
             <label>

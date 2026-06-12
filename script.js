@@ -1,6 +1,8 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnUc8DNvqS0wVtvVMJz5WOYFOEQr5xcPnzj4-zCIYcXFRqNu1bhL6PDIuwlSs7ydzEXQ/exec";
 
 const dateInput = document.querySelector("#callDate");
+const dateDisplay = document.querySelector("#dateDisplay");
+const dateControl = document.querySelector(".date-control");
 const form = document.querySelector("#bookingForm");
 const result = document.querySelector("#result");
 
@@ -9,6 +11,8 @@ const yyyy = today.getFullYear();
 const mm = String(today.getMonth() + 1).padStart(2, "0");
 const dd = String(today.getDate()).padStart(2, "0");
 dateInput.min = `${yyyy}-${mm}-${dd}`;
+
+dateInput.addEventListener("change", updateDateDisplay);
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -38,7 +42,7 @@ form.addEventListener("submit", async (event) => {
 
   showMessage("<strong>Programarea a fost inregistrata.</strong>");
   form.reset();
-  dateInput.min = `${yyyy}-${mm}-${dd}`;
+  resetDateField();
   resetButton(submitButton);
 });
 
@@ -60,4 +64,26 @@ function showMessage(message) {
       result.style.transition = "";
     });
   }, 2000);
+}
+
+function updateDateDisplay() {
+  if (!dateInput.value) {
+    resetDateField();
+    return;
+  }
+
+  const date = new Date(`${dateInput.value}T12:00:00`);
+
+  dateDisplay.textContent = new Intl.DateTimeFormat("ro-RO", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  }).format(date);
+  dateControl.classList.add("has-value");
+}
+
+function resetDateField() {
+  dateInput.min = `${yyyy}-${mm}-${dd}`;
+  dateDisplay.textContent = "Data";
+  dateControl.classList.remove("has-value");
 }
