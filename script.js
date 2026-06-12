@@ -12,6 +12,13 @@ const mm = String(today.getMonth() + 1).padStart(2, "0");
 const dd = String(today.getDate()).padStart(2, "0");
 dateInput.min = `${yyyy}-${mm}-${dd}`;
 
+dateControl.addEventListener("click", openDatePicker);
+dateControl.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    openDatePicker();
+  }
+});
 dateInput.addEventListener("change", updateDateDisplay);
 
 form.addEventListener("submit", async (event) => {
@@ -86,4 +93,17 @@ function resetDateField() {
   dateInput.min = `${yyyy}-${mm}-${dd}`;
   dateDisplay.textContent = "Data";
   dateControl.classList.remove("has-value");
+}
+
+function openDatePicker() {
+  try {
+    if (typeof dateInput.showPicker === "function") {
+      dateInput.showPicker();
+      return;
+    }
+  } catch (error) {
+    dateInput.focus();
+  }
+
+  dateInput.focus();
 }

@@ -181,6 +181,7 @@ textarea:focus {
   color: #717d8f;
   background: var(--field);
   font-weight: 500;
+  cursor: pointer;
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -208,6 +209,7 @@ textarea:focus {
   border: 0;
   opacity: 0;
   cursor: pointer;
+  pointer-events: none;
 }
 
 .calendar-icon {
