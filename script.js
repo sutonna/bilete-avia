@@ -15,8 +15,22 @@ const timePeriodInput = document.querySelector("#callTimePeriod");
 const form = document.querySelector("#bookingForm");
 const result = document.querySelector("#result");
 const MIN_CALENDAR_YEAR = 2026;
-const MIN_CALENDAR_MONTH = 5;
+const MIN_CALENDAR_MONTH = 6;
 const MIN_CALENDAR_DAY = 13;
+const MONTH_NAMES = [
+  "ianuarie",
+  "februarie",
+  "martie",
+  "aprilie",
+  "mai",
+  "iunie",
+  "iulie",
+  "august",
+  "septembrie",
+  "octombrie",
+  "noiembrie",
+  "decembrie"
+];
 
 let calendarView = new Date(getToday().getFullYear(), getToday().getMonth(), 1);
 let selectedDate = null;
@@ -189,7 +203,7 @@ function renderCalendar() {
   const monthEnd = new Date(calendarView.getFullYear(), calendarView.getMonth() + 1, 0);
   const firstWeekday = (monthStart.getDay() + 6) % 7;
 
-  calendarMonth.textContent = new Intl.DateTimeFormat("ro-RO", { month: "long" }).format(monthStart);
+  calendarMonth.textContent = MONTH_NAMES[monthStart.getMonth()];
   calendarYear.textContent = monthStart.getFullYear();
 
   for (let i = 0; i < firstWeekday; i += 1) {
@@ -254,7 +268,7 @@ function toDateValue(date) {
 }
 
 function getToday() {
-  const date = new Date(MIN_CALENDAR_YEAR, MIN_CALENDAR_MONTH, MIN_CALENDAR_DAY);
+  const date = new Date(MIN_CALENDAR_YEAR, MIN_CALENDAR_MONTH - 1, MIN_CALENDAR_DAY);
   date.setHours(0, 0, 0, 0);
 
   return date;
