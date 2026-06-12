@@ -229,6 +229,18 @@ textarea:focus {
   box-shadow: 5px 0 #7b8797, 0 5px #7b8797, 5px 5px #7b8797;
 }
 
+.calendar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  display: none;
+  background: transparent;
+}
+
+.calendar-backdrop.open {
+  display: block;
+}
+
 .calendar-popover {
   position: absolute;
   z-index: 20;

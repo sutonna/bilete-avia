@@ -3,6 +3,7 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnUc8DNvqS0wVt
 const dateInput = document.querySelector("#callDate");
 const dateDisplay = document.querySelector("#dateDisplay");
 const dateControl = document.querySelector(".date-control");
+const calendarBackdrop = document.querySelector("#calendarBackdrop");
 const calendarPopover = document.querySelector("#calendarPopover");
 const calendarGrid = document.querySelector("#calendarGrid");
 const calendarMonth = document.querySelector("#calendarMonth");
@@ -37,6 +38,11 @@ dateControl.addEventListener("keydown", (event) => {
 calendarPopover.addEventListener("click", (event) => {
   event.stopPropagation();
 });
+calendarBackdrop.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  closeCalendar();
+});
 prevMonthButton.addEventListener("click", (event) => {
   event.preventDefault();
   event.stopPropagation();
@@ -47,7 +53,6 @@ nextMonthButton.addEventListener("click", (event) => {
   event.stopPropagation();
   changeMonth(1);
 });
-document.addEventListener("click", closeCalendarOnOutsideClick);
 document.addEventListener("keydown", closeCalendarOnEscape);
 timeValueInput.addEventListener("input", formatTimeInput);
 
@@ -152,20 +157,20 @@ function toggleCalendar() {
 }
 
 function openCalendar() {
-  const dateToShow = selectedDate || today;
+  if (!selectedDate) {
+    selectDate(today, { keepOpen: true });
+  }
+
+  const dateToShow = selectedDate;
   calendarView = new Date(dateToShow.getFullYear(), dateToShow.getMonth(), 1);
   renderCalendar();
+  calendarBackdrop.classList.add("open");
   calendarPopover.classList.add("open");
 }
 
 function closeCalendar() {
+  calendarBackdrop.classList.remove("open");
   calendarPopover.classList.remove("open");
-}
-
-function closeCalendarOnOutsideClick(event) {
-  if (!event.target.closest(".date-field")) {
-    closeCalendar();
-  }
 }
 
 function closeCalendarOnEscape(event) {
@@ -221,12 +226,15 @@ function renderCalendar() {
   }
 }
 
-function selectDate(date) {
+function selectDate(date, options = {}) {
   selectedDate = date;
   dateInput.value = toDateValue(date);
   updateDateDisplay(date);
   renderCalendar();
-  closeCalendar();
+
+  if (!options.keepOpen) {
+    closeCalendar();
+  }
 }
 
 function isSameDate(firstDate, secondDate) {
