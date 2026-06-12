@@ -16,7 +16,7 @@ const form = document.querySelector("#bookingForm");
 const result = document.querySelector("#result");
 const MIN_CALENDAR_YEAR = 2026;
 const MIN_CALENDAR_MONTH = 5;
-const MIN_CALENDAR_DAY = 12;
+const MIN_CALENDAR_DAY = 13;
 
 let calendarView = new Date(getToday().getFullYear(), getToday().getMonth(), 1);
 let selectedDate = null;
@@ -63,7 +63,7 @@ form.addEventListener("submit", async (event) => {
   if (!dateInput.value) {
     showMessage("<strong>Alege data apelului.</strong>");
     dateControl.focus();
-    calendarPopover.classList.add("open");
+    openCalendar();
     return;
   }
 
@@ -158,10 +158,6 @@ function toggleCalendar() {
 
 function openCalendar() {
   const today = getToday();
-
-  if (!selectedDate) {
-    setSelectedDate(today);
-  }
 
   calendarView = new Date(today.getFullYear(), today.getMonth(), 1);
   renderCalendar();
