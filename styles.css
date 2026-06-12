@@ -244,12 +244,18 @@ textarea:focus {
   pointer-events: none;
   transform: translateY(-4px);
   transition: opacity 0.18s ease, transform 0.18s ease;
+  overflow: hidden;
 }
 
 .calendar-popover.open {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
+}
+
+.calendar-popover button {
+  box-shadow: none;
+  transform: none;
 }
 
 .calendar-head {
@@ -280,6 +286,7 @@ textarea:focus {
 .calendar-nav {
   min-height: 32px;
   width: 32px;
+  min-width: 32px;
   padding: 0;
   border: 1px solid #d8e0ea;
   border-radius: 999px;
@@ -288,6 +295,7 @@ textarea:focus {
   box-shadow: none;
   font-size: 22px;
   font-weight: 500;
+  line-height: 1;
 }
 
 .calendar-nav:hover {
@@ -314,7 +322,10 @@ textarea:focus {
 .calendar-day {
   display: grid;
   place-items: center;
+  width: 100%;
+  min-width: 0;
   min-height: 30px;
+  padding: 0;
   border: 0;
   border-radius: 8px;
   background: transparent;
