@@ -14,7 +14,9 @@ const timeValueInput = document.querySelector("#callTimeValue");
 const timePeriodInput = document.querySelector("#callTimePeriod");
 const form = document.querySelector("#bookingForm");
 const result = document.querySelector("#result");
-const MIN_CALENDAR_DATE = "2026-06-12";
+const MIN_CALENDAR_YEAR = 2026;
+const MIN_CALENDAR_MONTH = 5;
+const MIN_CALENDAR_DAY = 12;
 
 let calendarView = new Date(getToday().getFullYear(), getToday().getMonth(), 1);
 let selectedDate = null;
@@ -158,7 +160,7 @@ function openCalendar() {
   const today = getToday();
 
   if (!selectedDate) {
-    selectDate(today, { keepOpen: true });
+    setSelectedDate(today);
   }
 
   calendarView = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -227,14 +229,18 @@ function renderCalendar() {
 }
 
 function selectDate(date, options = {}) {
-  selectedDate = date;
-  dateInput.value = toDateValue(date);
-  updateDateDisplay(date);
+  setSelectedDate(date);
   renderCalendar();
 
   if (!options.keepOpen) {
     closeCalendar();
   }
+}
+
+function setSelectedDate(date) {
+  selectedDate = date;
+  dateInput.value = toDateValue(date);
+  updateDateDisplay(date);
 }
 
 function isSameDate(firstDate, secondDate) {
@@ -252,7 +258,7 @@ function toDateValue(date) {
 }
 
 function getToday() {
-  const date = new Date(`${MIN_CALENDAR_DATE}T12:00:00`);
+  const date = new Date(MIN_CALENDAR_YEAR, MIN_CALENDAR_MONTH, MIN_CALENDAR_DAY);
   date.setHours(0, 0, 0, 0);
 
   return date;
