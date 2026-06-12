@@ -378,6 +378,7 @@
   </main>
 
   <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnUc8DNvqS0wVtvVMJz5WOYFOEQr5xcPnzj4-zCIYcXFRqNu1bhL6PDIuwlSs7ydzEXQ/exec";
     const dateInput = document.querySelector("#callDate");
     const form = document.querySelector("#bookingForm");
     const result = document.querySelector("#result");
@@ -388,7 +389,7 @@
     const dd = String(today.getDate()).padStart(2, "0");
     dateInput.min = `${yyyy}-${mm}-${dd}`;
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const data = new FormData(form);
@@ -396,6 +397,7 @@
       const phone = data.get("phone");
       const callDate = data.get("callDate");
       const callTime = data.get("callTime");
+      const submitButton = form.querySelector("button");
 
       const formattedDate = new Intl.DateTimeFormat("ro-RO", {
         day: "numeric",
@@ -403,12 +405,40 @@
         year: "numeric"
       }).format(new Date(`${callDate}T12:00:00`));
 
+      submitButton.disabled = true;
+      submitButton.textContent = "Se trimite...";
+
+      if (APPS_SCRIPT_URL) {
+        data.append("createdAt", new Date().toISOString());
+
+        try {
+          await fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: data
+          });
+        } catch (error) {
+          result.classList.add("show");
+          result.innerHTML = `
+            <strong>Programarea nu a putut fi trimisa.</strong><br>
+            Te rugam sa verifici conexiunea la internet si sa incerci din nou.
+          `;
+          submitButton.disabled = false;
+          submitButton.textContent = "Confirma programarea";
+          return;
+        }
+      }
+
       result.classList.add("show");
       result.innerHTML = `
         <strong>Programarea a fost inregistrata.</strong><br>
         ${clientName}, Nestor te va suna pe ${phone} in data de
         <strong>${formattedDate}</strong>, la ora <strong>${callTime}</strong>.
       `;
+      form.reset();
+      dateInput.min = `${yyyy}-${mm}-${dd}`;
+      submitButton.disabled = false;
+      submitButton.textContent = "Confirma programarea";
     });
   </script>
 </body>
